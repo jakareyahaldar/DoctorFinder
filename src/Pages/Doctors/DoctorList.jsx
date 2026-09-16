@@ -6,8 +6,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { doctors } from "./doctors";
+import { useNavigate } from "react-router-dom";
 
 export default function DoctorsList() {
+  const navigate = useNavigate()
   const handleAppointment = (doctor) => {
     console.log("Appointment:", doctor.name);
 
@@ -34,6 +36,7 @@ export default function DoctorsList() {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {doctors.map((doctor) => (
             <div
+              onClick={()=>navigate('/appointment')}
               key={doctor.id}
               className="group overflow-hidden border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >

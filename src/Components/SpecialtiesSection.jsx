@@ -23,6 +23,7 @@ import {
   faHandDots,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 
 const specialties_config = [
@@ -142,7 +143,7 @@ export default function SpecialtiesSection() {
   return (
     <div className="py-10">
       <h3 className="text-2xl font-bold">Popular Specialties</h3>
-      <div className="grid grid-cols-4 gap-10">
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-10">
         {
             specialties_config.map((item)=> <SpecialtiesCard data={item} /> )
         }
@@ -152,8 +153,9 @@ export default function SpecialtiesSection() {
 }
 
 function SpecialtiesCard({data}) {
+  const navigate = useNavigate()
   return (
-    <div className="text-center  py-10 rounded-2xl shadow-2xl border border-gray-400 mt-5 hover:scale-110 duration-300 hover:bg-gray-100 group">
+    <div onClick={()=>navigate("/sp/"+data.specialties)} className="text-center  py-10 rounded-2xl shadow-2xl border border-gray-400 mt-5 hover:scale-110 duration-300 hover:bg-gray-100 group">
       <FontAwesomeIcon className="text-3xl mb-5 group-hover:text-blue-700 duration-300" icon={data.icon} />
       <div>
         <h4 className="text-xl font-bold">{data.specialties}</h4>

@@ -12,80 +12,28 @@ import {
   CheckCircle2,
   Clock,
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const doctor = {
-  name: "ডাঃ সানজিদা হুদা সুইটি",
-  image: "/doctors/sanjida-huda-sweety.jpg",
 
-  degrees: [
-    "এম বি বি এস",
-    "বি সি এস (স্বাস্থ্য)",
-    "এম ডি (কার্ডিওলজি)",
-  ],
-
-  designation: "কনসালটেন্ট কার্ডিওলজিস্ট",
-
-  specialty: {
-    name: "কার্ডিওলজি",
-    category: "হৃদরোগ বিশেষজ্ঞ",
-  },
-
-  expertise: [
-    "হৃদরোগ",
-    "উচ্চ রক্তচাপ",
-    "হার্ট অ্যাটাক",
-    "বুকে ব্যথা",
-    "হার্ট ফেইলিউর",
-  ],
-
-  workplace: {
-    name: "শহীদ শেখ আবু নাসের বিশেষায়িত হাসপাতাল",
-    city: "খুলনা",
-    division: "খুলনা বিভাগ",
-  },
-
-  appointment: {
-    phone: ["01712345678", "01912345678"],
-  },
-
-  chambers: [
-    {
-      name: "খুলনা মেডিকেল সেন্টার",
-      city: "খুলনা",
-      address: "১২৩, শের-এ-বাংলা রোড, খুলনা",
-    },
-    {
-      name: "ডক্টরস ডায়াগনস্টিক কমপ্লেক্স",
-      city: "খুলনা",
-      address: "সোনাডাঙ্গা, খুলনা",
-    },
-  ],
-
-  conditionsTreated: [
-    "করোনারি আর্টারি ডিজিজ",
-    "উচ্চ রক্তচাপ",
-    "হার্ট অ্যাটাক",
-    "হার্ট ফেইলিউর",
-    "অ্যারিথমিয়া",
-  ],
-
-  fees: {
-    newPatient: "৮০০",
-    followUp: "৫০০",
-    reportReview: "৩০০",
-  },
-
-  rating: 5,
-};
 
 export default function DoctorDetails() {
-  const phone = doctor.appointment.phone[0];
+  
+
+
+  const {doctors, isLoading, isError, error} = useSelector(e=> e.doctors)
+
+  const { pathname } = useLocation()
+  const slug = pathname.split("/")[2]
+  const doctor = doctors.find(e=> e.name.replaceAll(".","-").replaceAll(" ","").toLowerCase() === slug )
+  console.log(doctor)
+  const phone = doctor?.appointment?.phone[0];
 
   // Remove spaces, + and other characters
-  const cleanPhone = phone.replace(/\D/g, "");
+  const cleanPhone = phone?.replace(/\D/g, "");
 
   // Bangladesh WhatsApp number
-  const whatsappNumber = cleanPhone.startsWith("0")
+  const whatsappNumber = cleanPhone?.startsWith("0")
     ? `88${cleanPhone}`
     : cleanPhone;
 

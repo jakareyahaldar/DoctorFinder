@@ -5,6 +5,7 @@ export const counterSlice = createSlice({
     initialState: {
         doctors: [
             {
+                _id: "riereirieoreoiroiewio",
                 name: "ডাঃ সানজিদা হুদা সুইটি",
                 image: "/doctors/sanjida-huda-sweety.jpg",
 
@@ -69,6 +70,7 @@ export const counterSlice = createSlice({
                 rating: 5,
             },
             {
+                _id: "riereirieoreoirofdfiewio",
                 name: "ডাঃ সানজিদা হুদা সুইটি",
                 image: "/doctors/sanjida-huda-sweety.jpg",
 
@@ -133,8 +135,9 @@ export const counterSlice = createSlice({
                 rating: 5,
             },
             {
+                _id: "riereirieorfgdgdfeoiroiewio",
                 name: "dr. Jakareya Haldar",
-                image: "/doctors/sanjida-huda-sweety.jpg",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZvPEZWcV33_laZlW1p2CnE18lyV_sQhHhxwMoTq95jw&s=10",
 
                 degrees: [
                     "এম বি বি এস",

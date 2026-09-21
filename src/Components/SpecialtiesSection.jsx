@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getSpecialtyIcons } from "../lib/specialtyIcons";
+import { getSpecialtyIcons } from "../lib/specialtyManager";
 import { useEffect, useState } from "react";
 import { icon } from "@fortawesome/fontawesome-svg-core";
 

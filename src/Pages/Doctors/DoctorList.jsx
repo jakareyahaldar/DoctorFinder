@@ -18,6 +18,7 @@ export default function DoctorsList() {
 
   const doctors = doctorList.filter( e => {
     console.log(e.specialty.name.toLowerCase() === specialty)
+    return e.specialty.name.toLowerCase() === specialty
   })
   console.log(doctors)
 
@@ -27,7 +28,9 @@ export default function DoctorsList() {
 
     // You can open appointment modal here
     // or navigate to appointment page
+    
   };
+  console.log("doctors")
 
   return (
     <section className="w-full bg-white py-10">
@@ -46,10 +49,13 @@ export default function DoctorsList() {
 
         {/* Doctors Grid */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {doctors.map((doctor) => (
-            <div
-              onClick={()=>navigate('/appointment')}
-              key={doctor.id}
+          {
+            doctors.map((doctor)=>{
+              const name_slug = doctor.name.replaceAll(".","-").replaceAll(" ","").toLowerCase()
+              return (
+                 <div
+              onClick={()=>navigate('/appointment/'+name_slug)}
+              key={doctor.name}
               className="group overflow-hidden border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               {/* Doctor Image */}
@@ -71,7 +77,7 @@ export default function DoctorsList() {
 
                 {/* Specialty */}
                 <p className="mt-3 min-h-[48px] text-base leading-6 text-gray-600">
-                  {doctor.specialty}
+                  {doctor.specialty.name}
                 </p>
 
                 {/* Fee */}
@@ -82,7 +88,7 @@ export default function DoctorsList() {
                   />
 
                   <span className="text-base">
-                    ফি: {doctor.fee} টাকা
+                    ফি: {doctor.fees.newPatient} টাকা
                   </span>
                 </div>
 
@@ -100,7 +106,9 @@ export default function DoctorsList() {
                 </button>
               </div>
             </div>
-          ))}
+              )
+            })
+          }
         </div>
       </div>
     </section>

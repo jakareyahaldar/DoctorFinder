@@ -23,7 +23,7 @@ function App() {
         <Routes>
           <Route element={<Home />} path='/' />
           <Route element={<DoctorList />} path='/sp/:specialties' />
-          <Route element={<DoctorDetails />} path='/appointment' />
+          <Route element={<DoctorDetails />} path='/appointment/:slug' />
           <Route element={<AdminLogin />} path='/admin-login' />
           <Route element={<Dashboard />} path='dashboard'>
             <Route index element={<DashboardHome />} />

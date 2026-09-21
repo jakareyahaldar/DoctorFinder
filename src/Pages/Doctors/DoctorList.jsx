@@ -5,10 +5,22 @@ import {
   faCalendarCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { doctors } from "./doctors";
-import { useNavigate } from "react-router-dom";
+// import { doctors } from "./doctors";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function DoctorsList() {
+
+  const {pathname} = useLocation()
+  const specialty = pathname.split("/")[2]
+
+  const { doctors: doctorList, isLoading, isError, error } = useSelector( e => e.doctors )
+
+  const doctors = doctorList.filter( e => {
+    console.log(e.specialty.name.toLowerCase() === specialty)
+  })
+  console.log(doctors)
+
   const navigate = useNavigate()
   const handleAppointment = (doctor) => {
     console.log("Appointment:", doctor.name);

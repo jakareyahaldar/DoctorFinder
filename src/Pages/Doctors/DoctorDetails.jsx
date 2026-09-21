@@ -19,13 +19,16 @@ import { useSelector } from "react-redux";
 
 export default function DoctorDetails() {
   
-
-
   const {doctors, isLoading, isError, error} = useSelector(e=> e.doctors)
 
   const { pathname } = useLocation()
   const slug = pathname.split("/")[2]
+  console.log(slug)
   const doctor = doctors.find(e=> e.name.replaceAll(".","-").replaceAll(" ","").toLowerCase() === slug )
+  const ddd = doctors.find(e=> {
+    console.log(e.name.replaceAll(".","-").replaceAll(" ","").toLowerCase(), slug)
+  })
+
   console.log(doctor)
   const phone = doctor?.appointment?.phone[0];
 

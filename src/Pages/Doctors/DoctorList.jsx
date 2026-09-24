@@ -17,10 +17,8 @@ export default function DoctorsList() {
   const { doctors: doctorList, isLoading, isError, error } = useSelector( e => e.doctors )
 
   const doctors = doctorList.filter( e => {
-    console.log(e.specialty.name.toLowerCase() === specialty)
-    return e.specialty.name.toLowerCase() === specialty
+    return e.specialty.slug === decodeURIComponent(specialty)
   })
-  console.log(doctors)
 
   const navigate = useNavigate()
   const handleAppointment = (doctor) => {
@@ -30,7 +28,6 @@ export default function DoctorsList() {
     // or navigate to appointment page
     
   };
-  console.log("doctors")
 
   return (
     <section className="w-full bg-white py-10">
@@ -51,10 +48,9 @@ export default function DoctorsList() {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {
             doctors.map((doctor)=>{
-              const name_slug = doctor.name.replaceAll(".","-").replaceAll(" ","").toLowerCase()
               return (
                  <div
-              onClick={()=>navigate('/appointment/'+name_slug)}
+              onClick={()=>navigate('/appointment/'+doctor.slug)}
               key={doctor.name}
               className="group overflow-hidden border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >

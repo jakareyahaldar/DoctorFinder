@@ -18,12 +18,14 @@ export default function SpecialtiesSection() {
     const outputData = []
     for (const sp of uniqeSpecialites) {
       try {
+        const doc = doctorsList.find( d =>  d.specialty.name === sp )
         let count = 0;
         for (const innerSp of extractAllSpecialites) {
           if (innerSp === sp) count++
         }
         outputData.push({
           specialty: sp,
+          slug: doc.specialty.slug,
           icon: getSpecialtyIcons(sp),
           doctors: count
         })
@@ -57,7 +59,7 @@ function SpecialtiesCard({ data }) {
   const navigate = useNavigate()
 
   return (
-    <div key={data.key} onClick={() => navigate("/sp/" + data.specialty.toLowerCase())} className="text-center  py-10 rounded-2xl shadow-2xl border border-gray-400 mt-5 hover:scale-110 duration-300 hover:bg-gray-100 group">
+    <div key={data.key} onClick={() => navigate("/sp/" + data.slug)} className="text-center  py-10 rounded-2xl shadow-2xl border border-gray-400 mt-5 hover:scale-110 duration-300 hover:bg-gray-100 group">
       <FontAwesomeIcon className="text-3xl mb-5 group-hover:text-blue-700 duration-300" icon={data.icon} />
       <div>
         <h4 className="text-xl font-bold">{data.specialty}</h4>

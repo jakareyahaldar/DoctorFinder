@@ -23,13 +23,16 @@ export default function DoctorDetails() {
 
   const { pathname } = useLocation()
   const slug = pathname.split("/")[2]
-  console.log(slug)
-  const doctor = doctors.find(e=> e.name.replaceAll(".","-").replaceAll(" ","").toLowerCase() === slug )
-  const ddd = doctors.find(e=> {
-    console.log(e.name.replaceAll(".","-").replaceAll(" ","").toLowerCase(), slug)
-  })
+  const doctor = doctors.find(e=> e.slug === decodeURIComponent(slug) )
 
   console.log(doctor)
+  if(!doctor){
+    return (
+      <div className="h-dvh w-full flex justify-center items-center">
+        <h1 className="font-bold text-2xl">Doctor not found...</h1>
+      </div>
+    )
+  }
   const phone = doctor?.appointment?.phone[0];
 
   // Remove spaces, + and other characters
@@ -146,7 +149,7 @@ export default function DoctorDetails() {
                 </div>
 
                 <h2 className="text-lg font-bold text-gray-900">
-                  Educational Qualifications
+                  শিক্ষাগত যোগ্যতা
                 </h2>
               </div>
 
@@ -170,7 +173,7 @@ export default function DoctorDetails() {
                 </div>
 
                 <h2 className="text-lg font-bold text-gray-900">
-                  Areas of Expertise
+                  দক্ষতার ক্ষেত্রসমূহ
                 </h2>
               </div>
 

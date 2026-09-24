@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { add_doctor } from "../features/doctors/doctorSlice";
+import { useDispatch } from "react-redux";
+import { genarate_slug } from "../lib/genarate_slug";
+import { useLocation } from "react-router-dom";
 
 export default function AddDoctors() {
+  const { state } = useLocation()
+  console.log(state)
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     name: "",
     image: "",
@@ -44,6 +51,15 @@ export default function AddDoctors() {
 
     rating: 5,
   });
+
+
+  useEffect(()=>{
+    if(state && state.data){
+      console.log(state.data)
+      setFormData(state.data)
+      console.log(formData)
+    }
+  },[])
 
   // --------------------------------
   // Basic input handler
@@ -200,7 +216,14 @@ export default function AddDoctors() {
       rating: Number(formData.rating),
     };
 
-    console.log("Doctor Data:", doctorData);
+    // add slugs
+    doctorData._id = crypto.randomUUID()
+    doctorData.slug = genarate_slug(doctorData.name)
+    doctorData.specialty.slug = genarate_slug(doctorData.specialty.name)
+
+    dispatch(add_doctor(doctorData))
+
+    alert("doctor added successfully!")
 
     // This is the object you can later send to your API
     // fetch("/api/doctors", {
@@ -316,9 +339,9 @@ export default function AddDoctors() {
               </label>
 
               <select
-                value={formData.specialty.category}
+                value={formData.specialty.name}
                 onChange={(e) =>
-                  handleNestedChange("specialty", "category", e.target.value)
+                  handleNestedChange("specialty", "name", e.target.value)
                 }
                 className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               >

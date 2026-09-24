@@ -7,6 +7,7 @@ import {
   UserRound,
   Stethoscope,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,8 +56,8 @@ export default function Navbar() {
         <div className="flex h-20 items-center justify-between gap-4">
 
           {/* ================= Logo ================= */}
-          <a
-            href="/"
+          <Link
+            to="/"
             className="flex shrink-0 items-center gap-2.5"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
@@ -72,7 +73,7 @@ export default function Navbar() {
                 Find the right doctor
               </p>
             </div>
-          </a>
+          </Link>
 
           {/* ================= Search ================= */}
           <form
@@ -98,13 +99,13 @@ export default function Navbar() {
           <nav className="hidden items-center gap-1 lg:flex">
 
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-blue-50 hover:text-blue-600"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
 
           </nav>
@@ -125,13 +126,13 @@ export default function Navbar() {
             </button>
 
             {/* Login */}
-            <a
-              href="/login"
+            <Link
+              to="/dashboard"
               className="hidden items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 sm:flex"
             >
               <UserRound className="h-4 w-4" />
               Login
-            </a>
+            </Link>
 
             {/* Mobile Menu */}
             <button

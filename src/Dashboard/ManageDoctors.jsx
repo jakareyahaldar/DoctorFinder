@@ -6,45 +6,20 @@ import {
   Plus,
   Stethoscope,
 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { delete_doctor } from "../features/doctors/doctorSlice";
+import { useNavigate } from "react-router-dom";
 
-const initialDoctors = [
-  {
-    id: 1,
-    name: "ডাঃ সানজিদা হুদা সুইটি",
-    image: "/doctors/sanjida-huda-sweety.jpg",
-    specialties: "Cardiology",
-    designation: "Consultant Cardiologist",
-  },
-  {
-    id: 2,
-    name: "ডাঃ মোঃ রাকিব হাসান",
-    image: "/doctors/rakib-hasan.jpg",
-    specialties: "Neurology",
-    designation: "Senior Consultant",
-  },
-  {
-    id: 3,
-    name: "ডাঃ নুসরাত জাহান",
-    image: "/doctors/nusrat-jahan.jpg",
-    specialties: "Gynecology",
-    designation: "Associate Professor",
-  },
-  {
-    id: 4,
-    name: "ডাঃ আব্দুল্লাহ আল মামুন",
-    image: "/doctors/abdullah-mamun.jpg",
-    specialties: "Orthopedics",
-    designation: "Consultant Orthopedic Surgeon",
-  },
-];
 
 export default function ManageDoctors() {
-  const [doctors, setDoctors] = useState(initialDoctors);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { doctors, isLoading, isError, error } = useSelector( e => e.doctors)
   const [search, setSearch] = useState("");
 
   // Delete doctor
   const handleDelete = (id) => {
-    const doctor = doctors.find((doctor) => doctor.id === id);
+    const doctor = doctors.find((doctor) => doctor._id === id);
 
     const confirmDelete = window.confirm(
       `আপনি কি "${doctor.name}"-কে ডিলিট করতে চান?`
@@ -52,14 +27,14 @@ export default function ManageDoctors() {
 
     if (!confirmDelete) return;
 
-    setDoctors((prevDoctors) =>
-      prevDoctors.filter((doctor) => doctor.id !== id)
-    );
+    dispatch(delete_doctor(id))
   };
 
   // Edit doctor
   const handleEdit = (doctor) => {
     console.log("Edit doctor:", doctor);
+
+    navigate("/dashboard/add-doctor", { state: { data: doctor } })
 
     // এখানে আপনার edit page / modal open করতে পারবেন
     // Example:
@@ -150,7 +125,7 @@ export default function ManageDoctors() {
                 {filteredDoctors.length > 0 ? (
                   filteredDoctors.map((doctor) => (
                     <tr
-                      key={doctor.id}
+                      key={doctor._id}
                       className="transition hover:bg-gray-50"
                     >
 
@@ -170,7 +145,7 @@ export default function ManageDoctors() {
                             </h3>
 
                             <p className="text-xs text-gray-500">
-                              ID: #{doctor.id}
+                              ID: #{doctor._id}
                             </p>
                           </div>
 
@@ -180,7 +155,7 @@ export default function ManageDoctors() {
                       {/* Specialities */}
                       <td className="px-6 py-4">
                         <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
-                          {doctor.specialties}
+                          {doctor.specialty.name}
                         </span>
                       </td>
 
@@ -206,7 +181,7 @@ export default function ManageDoctors() {
                           {/* Delete */}
                           <button
                             type="button"
-                            onClick={() => handleDelete(doctor.id)}
+                            onClick={() => handleDelete(doctor._id)}
                             title="Delete doctor"
                             className="rounded-lg p-2 text-red-600 transition hover:bg-red-50"
                           >

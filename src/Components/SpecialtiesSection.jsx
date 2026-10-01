@@ -1,9 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getSpecialtyIcons } from "../lib/specialtyManager";
 import { useEffect, useState } from "react";
-import { icon } from "@fortawesome/fontawesome-svg-core";
 
 
 
@@ -26,7 +24,6 @@ export default function SpecialtiesSection() {
         outputData.push({
           specialty: sp,
           slug: doc.specialty.slug,
-          icon: getSpecialtyIcons(sp),
           doctors: count
         })
       }catch(err){
@@ -60,7 +57,6 @@ function SpecialtiesCard({ data }) {
 
   return (
     <div key={data.key} onClick={() => navigate("/sp/" + data.slug)} className="text-center  py-10 rounded-2xl shadow-2xl border border-gray-400 mt-5 hover:scale-110 duration-300 hover:bg-gray-100 group">
-      <FontAwesomeIcon className="text-3xl mb-5 group-hover:text-blue-700 duration-300" icon={data.icon} />
       <div>
         <h4 className="text-xl font-bold">{data.specialty}</h4>
         <p className="text-gray-400">{data.doctors} Doctors</p>

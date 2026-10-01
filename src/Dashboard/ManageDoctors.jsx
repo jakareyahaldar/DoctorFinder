@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { delete_doctor } from "../features/doctors/doctorSlice";
 import { useNavigate } from "react-router-dom";
+const API = import.meta.env.VITE_SERVER_URI
 
 
 export default function ManageDoctors() {
@@ -18,7 +19,7 @@ export default function ManageDoctors() {
   const [search, setSearch] = useState("");
 
   // Delete doctor
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const doctor = doctors.find((doctor) => doctor._id === id);
 
     const confirmDelete = window.confirm(
@@ -26,6 +27,24 @@ export default function ManageDoctors() {
     );
 
     if (!confirmDelete) return;
+
+    try{
+      const r = await fetch(API+"/doctor",{
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({_id: id})
+      })
+      const result = await r.json()
+      if(!r.ok){
+        alert("Delete Faild. please try again.")
+        return
+      }
+    }catch(err){
+      console.log(err)
+      return
+    }
 
     dispatch(delete_doctor(id))
   };
@@ -70,6 +89,7 @@ export default function ManageDoctors() {
           </div>
 
           <button
+            onClick={()=> navigate("/dashboard/add-doctor") }
             type="button"
             className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700"
           >

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { add_doctor } from "../features/doctors/doctorSlice";
+import { add_doctor, edit_doctor } from "../features/doctors/doctorSlice";
 import { useDispatch } from "react-redux";
 import { genarate_slug } from "../lib/genarate_slug";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { specialty_list } from "../data/specialtyList"
+import UploadWidget from "../Components/UploadWidget";
+const API = import.meta.env.VITE_SERVER_URI
+
 
 export default function AddDoctors() {
+  const navigate = useNavigate()
   const { state } = useLocation()
-  console.log(state)
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     name: "",
@@ -53,13 +57,11 @@ export default function AddDoctors() {
   });
 
 
-  useEffect(()=>{
-    if(state && state.data){
-      console.log(state.data)
+  useEffect(() => {
+    if (state && state.data) {
       setFormData(state.data)
-      console.log(formData)
     }
-  },[])
+  }, [])
 
   // --------------------------------
   // Basic input handler
@@ -174,65 +176,78 @@ export default function AddDoctors() {
   // --------------------------------
   // Image handler
   // --------------------------------
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    // Temporary browser preview URL
-    const imageUrl = URL.createObjectURL(file);
-
-    setFormData((prev) => ({
-      ...prev,
-      image: imageUrl,
-    }));
-  };
+  const handleUploadDoctorImage = (res) => {
+    if (!res) return
+    const url = res.url
+    // setFormData({ ...formData, image: url })
+    setFormData((prev)=> ({...prev, image: url}))
+  }
 
   // --------------------------------
   // Submit
   // --------------------------------
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const doctorData = {
       ...formData,
+
+      specialty: {
+        ...formData.specialty,
+        slug: genarate_slug(formData.specialty.name),
+      },
 
       degrees: formData.degrees.filter(Boolean),
 
       expertise: formData.expertise.filter(Boolean),
 
       appointment: {
+        ...formData.appointment,
         phone: formData.appointment.phone.filter(Boolean),
       },
 
       conditionsTreated: formData.conditionsTreated.filter(Boolean),
 
       fees: {
+        ...formData.fees,
         newPatient: Number(formData.fees.newPatient),
         followUp: Number(formData.fees.followUp),
         reportReview: Number(formData.fees.reportReview),
       },
 
       rating: Number(formData.rating),
+
+      slug: genarate_slug(formData.name),
     };
 
-    // add slugs
-    doctorData._id = crypto.randomUUID()
-    doctorData.slug = genarate_slug(doctorData.name)
-    doctorData.specialty.slug = genarate_slug(doctorData.specialty.name)
+    const isForEdit = state && state.data
 
-    dispatch(add_doctor(doctorData))
-
-    alert("doctor added successfully!")
+    const method = isForEdit ? "PUT" : "POST"
 
     // This is the object you can later send to your API
-    // fetch("/api/doctors", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(doctorData),
-    // });
+    try {
+      const req = await fetch(API + "/doctor", {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(doctorData),
+      });
+      const data = await req.json()
+      if(!req.ok){
+        alert(data.error)
+        return
+      }
+      if(isForEdit){
+        dispatch(edit_doctor(doctorData))
+        navigate('/dashboard/doctors')
+      }else{
+        dispatch(add_doctor(data.doctor))
+        navigate('/dashboard/doctors')
+      }
+    } catch (err) {
+      console.log(err)
+    }
   };
 
   return (
@@ -243,17 +258,17 @@ export default function AddDoctors() {
           <h1 className="text-3xl font-bold text-slate-900">Add Doctor</h1>
 
           <p className="mt-2 text-sm text-slate-500">
-            Add professional and chamber information for a doctor.
+            একজন চিকিৎসকের পেশাগত ও চেম্বার সংক্রান্ত তথ্য যোগ করুন।
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* ================= BASIC INFORMATION ================= */}
 
-          <Section title="Basic Information">
+          <Section title="প্রাথমিক তথ্য">
             <div className="grid gap-5 md:grid-cols-2">
               <Input
-                label="Doctor Name"
+                label="চিকিৎসকের নাম"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
@@ -264,15 +279,17 @@ export default function AddDoctors() {
               {/* Image */}
               <div>
                 <label className="mb-2 block text-sm font-medium text-slate-700">
-                  Doctor Image
+                  চিকিৎসকের ছবি
                 </label>
 
-                <input
+                {/* <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
                   className="block w-full rounded-lg border border-slate-300 bg-white text-sm file:mr-4 file:border-0 file:bg-slate-100 file:px-4 file:py-3 file:text-sm"
-                />
+                /> */}
+
+                <UploadWidget callback={handleUploadDoctorImage} />
 
                 {formData.image && (
                   <img
@@ -287,7 +304,7 @@ export default function AddDoctors() {
 
           {/* ================= PROFESSIONAL ================= */}
 
-          <Section title="Professional Information">
+          <Section title="পেশাগত তথ্য">
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
                 পদবি
@@ -323,7 +340,7 @@ export default function AddDoctors() {
 
             {/* Degrees */}
             <ArrayInput
-              title="Degrees"
+              title="ডিগ্রি"
               field="degrees"
               values={formData.degrees}
               placeholder="এম বি বি এস"
@@ -346,60 +363,15 @@ export default function AddDoctors() {
                 className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               >
                 <option value="">বিশেষজ্ঞ বিভাগ নির্বাচন করুন</option>
-
-                <option value="কার্ডিওলজি">কার্ডিওলজি (হৃদরোগ)</option>
-
-                <option value="নিউরোলজি">নিউরোলজি (স্নায়ুরোগ)</option>
-
-                <option value="নিউরোসার্জারি">নিউরোসার্জারি</option>
-
-                <option value="অর্থোপেডিক্স">
-                  অর্থোপেডিক্স (হাড় ও জয়েন্ট)
-                </option>
-
-                <option value="প্রসূতি ও স্ত্রীরোগ">প্রসূতি ও স্ত্রীরোগ</option>
-
-                <option value="শিশুরোগ">শিশুরোগ</option>
-
-                <option value="চর্ম ও যৌনরোগ">চর্ম ও যৌনরোগ</option>
-
-                <option value="মনোরোগ">মনোরোগ</option>
-
-                <option value="গ্যাস্ট্রোএন্টারোলজি">
-                  গ্যাস্ট্রোএন্টারোলজি (পরিপাকতন্ত্র)
-                </option>
-
-                <option value="ইউরোলজি">ইউরোলজি (মূত্রনালী)</option>
-
-                <option value="নেফ্রোলজি">নেফ্রোলজি (কিডনি)</option>
-
-                <option value="চক্ষুরোগ">চক্ষুরোগ</option>
-
-                <option value="নাক-কান-গলা">নাক-কান-গলা (ENT)</option>
-
-                <option value="দন্তরোগ">দন্তরোগ</option>
-
-                <option value="মেডিসিন">মেডিসিন</option>
-
-                <option value="সাধারণ সার্জারি">সাধারণ সার্জারি</option>
-
-                <option value="ফুসফুস ও শ্বাসতন্ত্র">
-                  ফুসফুস ও শ্বাসতন্ত্র
-                </option>
-
-                <option value="এন্ডোক্রাইনোলজি">এন্ডোক্রাইনোলজি (হরমোন)</option>
-
-                <option value="ক্যান্সার রোগ">ক্যান্সার রোগ (অনকোলজি)</option>
-
-                <option value="রেডিওলজি">রেডিওলজি</option>
-
-                <option value="অ্যানেস্থেসিওলজি">অ্যানেস্থেসিওলজি</option>
+                {
+                  specialty_list.map(item => <option key={item} value={item}>{item}</option>)
+                }
               </select>
             </div>
 
             {/* Expertise */}
             <ArrayInput
-              title="Expertise"
+              title="বিশেষ দক্ষতা"
               field="expertise"
               values={formData.expertise}
               placeholder="ল্যাপারোস্কোপিক সার্জন"
@@ -411,10 +383,10 @@ export default function AddDoctors() {
 
           {/* ================= WORKPLACE ================= */}
 
-          <Section title="Workplace">
+          <Section title="কর্মস্থল">
             <div className="grid gap-5 md:grid-cols-3">
               <Input
-                label="Hospital / Workplace"
+                label="হাসপাতাল / কর্মস্থল"
                 value={formData.workplace.name}
                 onChange={(e) =>
                   handleNestedChange("workplace", "name", e.target.value)
@@ -423,7 +395,7 @@ export default function AddDoctors() {
               />
 
               <Input
-                label="City"
+                label="শহর"
                 value={formData.workplace.city}
                 onChange={(e) =>
                   handleNestedChange("workplace", "city", e.target.value)
@@ -432,7 +404,7 @@ export default function AddDoctors() {
               />
 
               <Input
-                label="Division"
+                label="বিভাগ"
                 value={formData.workplace.division}
                 onChange={(e) =>
                   handleNestedChange("workplace", "division", e.target.value)
@@ -444,9 +416,9 @@ export default function AddDoctors() {
 
           {/* ================= APPOINTMENT ================= */}
 
-          <Section title="Appointment">
+          <Section title="অ্যাপয়েন্টমেন্ট">
             <ArrayInput
-              title="Phone Numbers"
+              title="ফোন নম্বর"
               field="appointment.phone"
               values={formData.appointment.phone}
               placeholder="01724536313"
@@ -489,14 +461,14 @@ export default function AddDoctors() {
           {/* ================= CHAMBERS ================= */}
 
           <Section
-            title="Chambers"
+            title="চেম্বারস"
             action={
               <button
                 type="button"
                 onClick={addChamber}
                 className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
               >
-                + Add Chamber
+                + চেম্বার যোগ করুন
               </button>
             }
           >
@@ -508,7 +480,7 @@ export default function AddDoctors() {
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="font-semibold text-slate-800">
-                      Chamber {index + 1}
+                      চেম্বার {index + 1}
                     </h3>
 
                     {formData.chambers.length > 1 && (
@@ -524,7 +496,7 @@ export default function AddDoctors() {
 
                   <div className="grid gap-5 md:grid-cols-3">
                     <Input
-                      label="Chamber Name"
+                      label="চেম্বারের নাম"
                       value={chamber.name}
                       onChange={(e) =>
                         handleChamberChange(index, "name", e.target.value)
@@ -533,7 +505,7 @@ export default function AddDoctors() {
                     />
 
                     <Input
-                      label="City"
+                      label="শহর"
                       value={chamber.city}
                       onChange={(e) =>
                         handleChamberChange(index, "city", e.target.value)
@@ -542,7 +514,7 @@ export default function AddDoctors() {
                     />
 
                     <Input
-                      label="Address"
+                      label="ঠিকানা"
                       value={chamber.address}
                       onChange={(e) =>
                         handleChamberChange(index, "address", e.target.value)
@@ -557,9 +529,9 @@ export default function AddDoctors() {
 
           {/* ================= TREATMENT ================= */}
 
-          <Section title="Treatment">
+          <Section title="চিকিৎসা">
             <ArrayInput
-              title="Conditions Treated"
+              title="যেসব রোগের চিকিৎসা করা হয়"
               field="conditionsTreated"
               values={formData.conditionsTreated}
               placeholder="অনিয়মিত ঋতুস্রাব"
@@ -571,10 +543,11 @@ export default function AddDoctors() {
 
           {/* ================= FEES ================= */}
 
-          <Section title="Fees">
+          <Section title="ফি">
+            <p>{formData.fees.newPatient}</p>
             <div className="grid gap-5 md:grid-cols-3">
               <Input
-                label="New Patient Fee"
+                label="নতুন রোগীর ফি"
                 type="number"
                 value={formData.fees.newPatient}
                 onChange={(e) =>
@@ -584,7 +557,7 @@ export default function AddDoctors() {
               />
 
               <Input
-                label="Follow Up Fee"
+                label="ফলো-আপ ফি"
                 type="number"
                 value={formData.fees.followUp}
                 onChange={(e) =>
@@ -594,7 +567,7 @@ export default function AddDoctors() {
               />
 
               <Input
-                label="Report Review Fee"
+                label="প্রতিবেদন পর্যালোচনা ফি"
                 type="number"
                 value={formData.fees.reportReview}
                 onChange={(e) =>
@@ -607,10 +580,10 @@ export default function AddDoctors() {
 
           {/* ================= RATING ================= */}
 
-          <Section title="Rating">
+          <Section title="রেটিং">
             <div className="max-w-xs">
               <label className="mb-2 block text-sm font-medium text-slate-700">
-                Rating
+                রেটিং
               </label>
 
               <select

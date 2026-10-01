@@ -11,13 +11,23 @@ import AddDoctors from './Dashboard/AddDoctors'
 import ManageDoctors from './Dashboard/ManageDoctors'
 import DoctorDetails from './Pages/Doctors/DoctorDetails'
 import AdminLogin from './Pages/AdminLogin'
+import PrivetComponent from './Dashboard/PrivetComponent'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { fetchDoctors } from './features/doctors/doctorSlice'
 
 
 
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    dispatch(fetchDoctors())
+  },[])
+
   return (
     <>
-      <main className='xl:px-80 px-5'>
+      <main className='2xl:px-80 px-5'>
         <Annousment />
         <Navbar />
         <Routes>
@@ -25,24 +35,26 @@ function App() {
           <Route element={<DoctorList />} path='/sp/:specialties' />
           <Route element={<DoctorDetails />} path='/appointment/:slug' />
           <Route element={<AdminLogin />} path='/admin-login' />
-          <Route element={<Dashboard />} path='dashboard'>
-            <Route index element={<DashboardHome />} />
-            <Route path='add-doctor' element={<AddDoctors />} />
-            <Route path='doctors' element={<ManageDoctors />} />
+          <Route element={<PrivetComponent />}>
+            <Route element={<Dashboard />} path='dashboard'>
+              <Route index element={<DashboardHome />} />
+              <Route path='add-doctor' element={<AddDoctors />} />
+              <Route path='doctors' element={<ManageDoctors />} />
+            </Route>
           </Route>
         </Routes>
-      </main>
+      </main >
     </>
   )
 }
 
 
-function Home(){
-  return(
+function Home() {
+  return (
     <section >
-        <Banner />
-        <SpecialtiesSection />
-      </section>
+      <Banner />
+      <SpecialtiesSection />
+    </section>
   )
 }
 

@@ -21,19 +21,7 @@ export default function Navbar() {
     {
       name: "Doctors",
       href: "/doctors",
-    },
-    {
-      name: "Specialties",
-      href: "/specialties",
-    },
-    {
-      name: "Hospitals",
-      href: "/hospitals",
-    },
-    {
-      name: "Chambers",
-      href: "/chambers",
-    },
+    }
   ];
 
   const handleSearch = (e) => {
@@ -113,17 +101,7 @@ export default function Navbar() {
           {/* ================= Right Actions ================= */}
           <div className="flex items-center gap-2">
 
-            {/* Location */}
-            <button
-              type="button"
-              className="hidden items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50 md:flex"
-            >
-              <MapPin className="h-5 w-5 text-blue-600" />
-
-              <span className="hidden xl:block">
-                Location
-              </span>
-            </button>
+           
 
             {/* Login */}
             <Link
@@ -131,7 +109,7 @@ export default function Navbar() {
               className="hidden items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 sm:flex"
             >
               <UserRound className="h-4 w-4" />
-              Login
+              Admin
             </Link>
 
             {/* Mobile Menu */}
@@ -189,22 +167,13 @@ export default function Navbar() {
 
             </nav>
 
-            {/* Mobile Location */}
-            <button
-              type="button"
-              className="mt-2 flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              <MapPin className="h-5 w-5 text-blue-600" />
-              Select Location
-            </button>
-
             {/* Mobile Login */}
             <a
-              href="/login"
+              href="/admin-login"
               className="mt-1 flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600"
             >
               <UserRound className="h-5 w-5" />
-              Login
+              Admin
             </a>
 
           </div>

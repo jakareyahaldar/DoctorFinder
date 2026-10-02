@@ -3,6 +3,7 @@ import {
   DoorClosedIcon,
   LayoutDashboard,
   Menu,
+  Settings,
   Stethoscope,
   UserPlus,
   Users,
@@ -20,6 +21,7 @@ export default function Sidebar() {
     { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, path:"" },
     { key: "add", label: "Add Doctor", icon: UserPlus, path:"add-doctor" },
     { key: "doctors", label: "Manage Doctors", icon: Users, path:"doctors" },
+    { key: "admin-change", label: "Change user and Pass", icon: Settings, path:"admin-change" },
     { key: "appointments", label: "Appointments", icon: CalendarCheck, path:"appoinment" },
   ];
 

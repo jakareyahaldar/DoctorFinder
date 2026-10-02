@@ -1,15 +1,23 @@
 
-import { useState } from "react";
-import {
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  User,
-  ArrowRight,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff, LockKeyhole, User, ArrowRight } from "lucide-react";
+import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+const API = import.meta.env.VITE_SERVER_URI
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [_, setCookie] = useCookies();
+  const navigate = useNavigate()
+
+  const { verified } = useSelector( state => state.authVerifyer )
+
+  useEffect(()=>{
+    if(verified){
+      navigate('/dashboard')
+    }
+  },[verified])
 
   const [formData, setFormData] = useState({
     username: "",
@@ -27,10 +35,28 @@ const AdminLogin = () => {
   };
 
   // Submit login
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Admin Login Data:", formData);
+    try{
+      const req = await fetch(API+"/auth/login",{
+        method: "POST",
+        headers:{
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
+      const result = await req.json()
+      if(!req.ok){
+        alert(result.error || "Login Faild try again")
+        return
+      }
+      setCookie("admin_token",result?.token)
+      navigate('/dashboard')
+    }catch(err){
+      console.log(err)
+      alert("Login faild Please check your network and contact devolopers.")
+    }
   };
 
   // Forgot password

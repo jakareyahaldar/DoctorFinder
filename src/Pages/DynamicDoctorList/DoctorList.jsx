@@ -9,12 +9,16 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function AllDoctorsList() {
+export default function DoctorsList() {
 
   const {pathname} = useLocation()
   const specialty = pathname.split("/")[2]
 
-  const { doctors, isLoading, isError, error } = useSelector( e => e.doctors )
+  const { doctors: doctorList, isLoading, isError, error } = useSelector( e => e.doctors )
+
+  const doctors = doctorList.filter( e => {
+    return e.specialty.slug === decodeURIComponent(specialty)
+  })
 
   const navigate = useNavigate()
   const handleAppointment = (doctor) => {

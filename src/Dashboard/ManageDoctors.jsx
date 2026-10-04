@@ -66,7 +66,7 @@ export default function ManageDoctors() {
 
     return (
       doctor.name.toLowerCase().includes(searchText) ||
-      doctor.specialties.toLowerCase().includes(searchText) ||
+      doctor.specialty.name.toLowerCase().includes(searchText) ||
       doctor.designation.toLowerCase().includes(searchText)
     );
   });
@@ -154,7 +154,7 @@ export default function ManageDoctors() {
                         <div className="flex items-center gap-3">
 
                           <img
-                            src={doctor.image}
+                            src={doctor.image || "/empty-person.png"}
                             alt={doctor.name}
                             className="h-12 w-12 rounded-full object-cover ring-2 ring-gray-100"
                           />

@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-  Search,
-  Menu,
-  X,
-  MapPin,
-  UserRound,
-  Stethoscope,
-} from "lucide-react";
+import { Search,  Menu,  X, UserRound,  Stethoscope } from "lucide-react";
 import { Link } from "react-router-dom";
+import DoctorSearchResults from "./DoctorsSearchResultNavbar";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,12 +24,10 @@ export default function Navbar() {
     if (!search.trim()) return;
 
     console.log("Search:", search);
-
-    // You can navigate to:
-    // /doctors?search=searchText
   };
 
   return (
+    <>
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-md">
 
       <div className="mx-auto max-w-7xl ">
@@ -181,5 +173,7 @@ export default function Navbar() {
 
       </div>
     </header>
+    <DoctorSearchResults searchText={search} />
+    </>
   );
 }

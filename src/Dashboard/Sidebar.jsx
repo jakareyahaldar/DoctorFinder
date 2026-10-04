@@ -22,7 +22,7 @@ export default function Sidebar() {
     { key: "add", label: "Add Doctor", icon: UserPlus, path:"add-doctor" },
     { key: "doctors", label: "Manage Doctors", icon: Users, path:"doctors" },
     { key: "admin-change", label: "Change user and Pass", icon: Settings, path:"admin-change" },
-    { key: "appointments", label: "Appointments", icon: CalendarCheck, path:"appoinment" },
+    // { key: "appointments", label: "Appointments", icon: CalendarCheck, path:"appoinment" },
   ];
 
   return (

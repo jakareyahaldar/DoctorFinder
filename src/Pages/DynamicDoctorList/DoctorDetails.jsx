@@ -56,7 +56,7 @@ export default function DoctorDetails() {
               {/* Doctor Image */}
               <div className="shrink-0">
                 <img
-                  src={doctor.image}
+                  src={doctor.image || "/empty-person.png"}
                   alt={doctor.name}
                   className="h-32 w-32 rounded-2xl object-cover ring-4 ring-blue-50 sm:h-40 sm:w-40"
                 />

@@ -57,7 +57,7 @@ function SpecialtiesCard({ data }) {
 
   return (
     <div key={data.key} onClick={() => navigate("/sp/" + data.slug)} className="text-center  py-10 rounded-2xl shadow-2xl border border-gray-400 mt-5 hover:scale-110 duration-300 hover:bg-gray-100 group">
-      <div>
+      <div className="p-2">
         <h4 className="md:text-xl font-bold">{data.specialty}</h4>
         <p className="text-gray-400">{data.doctors} Doctors</p>
       </div>

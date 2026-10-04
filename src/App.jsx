@@ -47,6 +47,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
+        <p className='fixed bottom-0 right-0 text-[10px] text-gray-500 animate-pulse'>Devoloper: <a title='See devoloper portfolio' href='https://jakareya-dev.vercel.app'>Jakareya Haldar</a></p>
       </main >
     </>
   )

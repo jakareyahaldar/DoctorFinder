@@ -544,7 +544,6 @@ export default function AddDoctors() {
           {/* ================= FEES ================= */}
 
           <Section title="ফি">
-            <p>{formData.fees.newPatient}</p>
             <div className="grid gap-5 md:grid-cols-3">
               <Input
                 label="নতুন রোগীর ফি"

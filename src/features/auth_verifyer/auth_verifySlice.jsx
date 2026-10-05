@@ -36,6 +36,11 @@ export const counterSlice = createSlice({
       // Add user to the state array
       state.verified = action.payload
       state.tryed = true
+      state.isLoading = false
+    })
+    builder.addCase(verifyToken.pending, (state, action) => {
+      // Add user to the state array
+      state.isLoading = true
     })
   },
 });

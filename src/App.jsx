@@ -13,15 +13,17 @@ import DoctorDetails from './Pages/DynamicDoctorList/DoctorDetails'
 import AdminLogin from './Pages/AdminLogin'
 import PrivetComponent from './Dashboard/PrivetComponent'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchDoctors } from './features/doctors/doctorSlice'
 import AllDoctorsList from './Pages/Doctors/DoctorList'
 import ChangeAdminUP from './Dashboard/ChangeAdminUP'
+import FullScreenLoader from './Components/FullScreenLoader'
 
 
 
 function App() {
   const dispatch = useDispatch()
+  const { isLoading } = useSelector( state => state.authVerifyer )
 
   useEffect(()=>{
     dispatch(fetchDoctors())
@@ -32,6 +34,7 @@ function App() {
       <main className='2xl:px-80 px-5'>
         <Annousment />
         <Navbar />
+        <FullScreenLoader isVisible={isLoading} message={"Verifiyeng Admin Please wait.."} />
         <Routes>
           <Route element={<Home />} path='/' />
           <Route element={<AllDoctorsList />} path='/doctors' />

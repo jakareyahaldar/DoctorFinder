@@ -13,7 +13,7 @@ export default function PrivetComponent() {
 
     const { verified, tryed } = useSelector( e => e.authVerifyer )
     if(admin_token  && !tryed ){
-        dispatch(verifyToken())
+        dispatch(verifyToken(admin_token))
     }
 
     const authIsOK = verified

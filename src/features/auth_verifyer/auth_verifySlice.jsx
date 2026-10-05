@@ -2,11 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const API = import.meta.env.VITE_SERVER_URI
 
 
+
+
+
 export const verifyToken = createAsyncThunk(
   'auth_verifyer/verifyToken',
-  async () => {
+  async (admin_token) => {
     try{
-      const r = await fetch(API+"/auth/token-verify",{credentials: "include"})
+      const r = await fetch(API+"/auth/token-verify",{credentials: "include",headers: { admin_token }})
       const data = await r.json()
       return data.verified
     }catch(err){

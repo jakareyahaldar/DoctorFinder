@@ -24,7 +24,7 @@ import FullScreenLoader from './Components/FullScreenLoader'
 function App() {
   const dispatch = useDispatch()
   const { isLoading: isVerifying } = useSelector( state => state.authVerifyer )
-  const { isLoading: isFetchingDoctors } = useSelector( state => state.authVerifyer )
+  const { isLoading: isFetchingDoctors } = useSelector( state => state.doctors )
 
   useEffect(()=>{
     dispatch(fetchDoctors())

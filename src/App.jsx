@@ -23,7 +23,8 @@ import FullScreenLoader from './Components/FullScreenLoader'
 
 function App() {
   const dispatch = useDispatch()
-  const { isLoading } = useSelector( state => state.authVerifyer )
+  const { isLoading: isVerifying } = useSelector( state => state.authVerifyer )
+  const { isLoading: isFetchingDoctors } = useSelector( state => state.authVerifyer )
 
   useEffect(()=>{
     dispatch(fetchDoctors())
@@ -34,7 +35,8 @@ function App() {
       <main className='2xl:px-80 px-5'>
         <Annousment />
         <Navbar />
-        <FullScreenLoader isVisible={isLoading} message={"Verifiyeng Admin Please wait.."} />
+        <FullScreenLoader isVisible={isVerifying} message={"এডমিন যাচাই করা হচ্ছে..."} />
+        <FullScreenLoader isVisible={isFetchingDoctors} message={"সকল ডাটা আনা হচ্ছে..."} />
         <Routes>
           <Route element={<Home />} path='/' />
           <Route element={<AllDoctorsList />} path='/doctors' />

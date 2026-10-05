@@ -122,6 +122,11 @@ export const counterSlice = createSlice({
     builder.addCase(fetchDoctors.fulfilled, (state, action) => {
       // Add user to the state array
       state.doctors = action.payload
+      state.isLoading = false
+    })
+    builder.addCase(fetchDoctors.pending, (state) => {
+      // Add user to the state array
+      state.isLoading = true
     })
   },
 });

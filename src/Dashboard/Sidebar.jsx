@@ -1,21 +1,29 @@
-import {
-  CalendarCheck,
-  DoorClosedIcon,
-  LayoutDashboard,
-  Menu,
-  Settings,
-  Stethoscope,
-  UserPlus,
-  Users,
-  X,
-} from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, Settings, Stethoscope, UserPlus, Users, X, } from "lucide-react";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { logout_admin } from "../features/auth_verifyer/auth_verifySlice";
 
 export default function Sidebar() {
   const [isOpen, setOpen] = useState(false);
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch()
+
+  const [,,removeCookie] = useCookies()
+
+  function Logout(){
+    try{
+      removeCookie("admin_token")
+      navigate("/")
+      setTimeout(()=>{
+        dispatch(logout_admin())
+      },100)
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   const items = [
     { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, path:"" },
@@ -60,6 +68,9 @@ export default function Sidebar() {
             );
           })}
         </nav>
+        <div className="flex justify-center">
+          <button onClick={Logout} className="bg-blue-400 px-2 py-1 rounded-md shadow-2xl shadow-white flex items-center gap-1 hover:bg-blue-700 transition duration-300"> <LogOut size={20}/> Logout Admin </button>
+        </div>
         <div className="p-5 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
           Admin panel · v1.0
         </div>

@@ -29,7 +29,12 @@ export const counterSlice = createSlice({
     isError: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    logout_admin: (state)=>{
+      state.verified = false
+      state.tryed = false
+    }
+  },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(verifyToken.fulfilled, (state, action) => {
@@ -46,6 +51,6 @@ export const counterSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {  } = counterSlice.actions;
+export const { logout_admin } = counterSlice.actions;
 
 export default counterSlice.reducer;

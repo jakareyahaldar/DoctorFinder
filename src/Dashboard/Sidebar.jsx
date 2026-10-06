@@ -69,7 +69,7 @@ export default function Sidebar() {
           })}
         </nav>
         <div className="flex justify-center">
-          <button onClick={Logout} className="bg-blue-400 px-2 py-1 rounded-md shadow-2xl shadow-white flex items-center gap-1 hover:bg-blue-700 transition duration-300"> <LogOut size={20}/> Logout Admin </button>
+          <button onClick={Logout} className="bg-blue-700 px-2 py-1 rounded-md shadow-2xl shadow-white flex items-center gap-1 hover:bg-blue-400 transition duration-300"> <LogOut size={20}/> Logout Admin </button>
         </div>
         <div className="p-5 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
           Admin panel · v1.0

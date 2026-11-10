@@ -1,5 +1,6 @@
 import './App.css'
 import Navbar from './Components/Navbar'
+import Footer from './Components/Footer'
 import Annousment from './Components/Annousment'
 import Banner from './Components/Banner'
 import SpecialtiesSection from './Components/SpecialtiesSection'
@@ -53,6 +54,7 @@ function App() {
           </Route>
         </Routes>
         <p className='fixed bottom-0 right-0 text-[10px] text-gray-500 animate-pulse'>Devoloper: <a title='See devoloper portfolio' href='https://jakareya-dev.vercel.app'>Jakareya Haldar</a></p>
+        <Footer />
       </main >
     </>
   )
